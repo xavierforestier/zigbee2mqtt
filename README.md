@@ -13,18 +13,19 @@ cp zigbee2mqtt-x.y.z.ebuild zigbee2mqtt-a.b.c.ebuild
 Now edit new ebuild and comment nodes_modules.tar.xz part in SRC_URI (line 13)
 Unpack the source :
 ```bash
-ebuild zigbee2mqtt-a.b.c.ebuild digest clean unpack
+ebuild zigbee2mqtt-a.b.c.ebuild digest clean prepare
 ```
 
 Go in the extracted source, generate nodes_modules :
 ```bash
 pushd /var/tmp/portage/app-misc/zigbee2mqtt-a.b.c/work/zigbee2mqtt-a.b.c
-npm install
+pnpm clean
+pnpm install
 ```
 Generate nodes_module-a.b.c.tar.xz
 ```bash
-pushd ..
-XZ_OPT=-9 tar -Jcvf zigbee2mqtt-a.b.c-nodes_modules.tar.xz zigbee2mqtt-a.b.c/node_modules/
+cd ..
+XZ_OPT=-9 tar -Jcvf $( pwd | rev | cut -d/ -f2 | rev )-nodes_modules.tar.xz $( pwd | rev | cut -d/ -f2 | rev )/node_modules/
 ```
 
 Upload node_modules in a release tagged a.b.c
